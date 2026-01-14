@@ -9,7 +9,7 @@ namespace ALS.Consumer
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var delayMs = configuration.GetValue<int?>($"{Constants.ConfigurationKeys.Worker}:{Constants.ConfigurationKeys.DelayMilliseconds}")
-                ?? throw new InvalidOperationException(Constants.ErrorMessages.WorkerDelayMilliseconsNotConfigured);
+                ?? throw new InvalidOperationException(Constants.ErrorMessages.WorkerDelayMillisecondsNotConfigured);
 
             while (!stoppingToken.IsCancellationRequested)
             {

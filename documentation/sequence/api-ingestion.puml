@@ -1,0 +1,18 @@
+@startuml
+
+actor Client
+participant "ALS.Api" as API
+participant "AuditIngestionService" as IngestionService
+participant "AuditRepository" as Repository
+database DB
+
+Client -> API : POST /api/audit
+API -> IngestionService : IngestAsync(AuditEventDto)
+IngestionService -> Repository : AddAsync(AuditEvent)
+Repository -> DB : Add(AuditEvent)
+DB --> Repository : EventId
+Repository --> IngestionService : EventId
+IngestionService --> API : EventId
+API --> Client : 202 Accepted (EventId)
+
+@enduml

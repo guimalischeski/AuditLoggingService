@@ -37,11 +37,11 @@ namespace ALS.Infrastructure.Health
                 }
                 }, ct);
 
-                return HealthCheckResult.Healthy(Constants.LogMessages.SQSReachable);
+                return HealthCheckResult.Healthy(Constants.LogMessages.SqsReachable);
             }
             catch (Exception ex)
             {
-                return HealthCheckResult.Unhealthy(Constants.LogMessages.SQSUnreachable, ex);
+                return HealthCheckResult.Unhealthy(Constants.LogMessages.SqsUnreachable, ex);
             }
         }
     }

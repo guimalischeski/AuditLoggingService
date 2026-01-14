@@ -1,18 +1,15 @@
-﻿using ALS.Core.Constants;
+﻿using System.Text.Json;
+using ALS.Core.Constants;
 using ALS.Core.Contracts;
 using ALS.Core.Domain;
 using ALS.Core.Enum;
 using ALS.Core.Interfaces;
-using ALS.Core.Observability;
 using Microsoft.Extensions.Logging;
-using System.Text.Json;
 
 namespace ALS.Infrastructure.Services
 {
     public sealed class AuditIngestionService : IAuditIngestionService
     {
-        private readonly AuditMetrics _metrics;
-
         private readonly IAuditRepository _repo;
         private readonly ILogger<AuditIngestionService> _logger;
 
@@ -20,7 +17,6 @@ namespace ALS.Infrastructure.Services
         {
             _repo = repo;
             _logger = logger;
-            _metrics = AuditMetrics.Instance;
         }
 
         public async Task<long> IngestAsync(AuditEventDto dto, AuditIngestSource source, string traceId, CancellationToken ct)
@@ -50,8 +46,6 @@ namespace ALS.Infrastructure.Services
                 _logger.LogInformation(Constants.LogMessages.IngestingAuditEvent, source, ev.UserId, ev.ActionType, ev.EntityId, traceId);
 
                 var entityId = await _repo.AddAsync(ev, ct);
-                _metrics.EventsIngested.Inc();
-
                 return entityId;
             }
             catch (Exception ex)

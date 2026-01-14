@@ -11,13 +11,13 @@ namespace ALS.Infrastructure.Services
 {
     public sealed class AuditQueryService : IAuditQueryService
     {
-        private readonly AuditDbContext _db;
         private readonly ILogger<AuditQueryService> _logger;
+        private readonly IAuditRepository _auditRepository;
 
-        public AuditQueryService(ILogger<AuditQueryService> logger, AuditDbContext db)
+        public AuditQueryService(ILogger<AuditQueryService> logger, IAuditRepository auditRepository)
         {
             _logger = logger;
-            _db = db;
+            _auditRepository = auditRepository;
         }
 
         public async Task<PagedResult<AuditEvent>> SearchAsync(AuditSearchRequest req, CancellationToken ct)
@@ -26,29 +26,29 @@ namespace ALS.Infrastructure.Services
             {
                 req = req.Normalize();
 
-                IQueryable<AuditEvent> q = _db.AuditEvents.AsNoTracking();
+                var query = _auditRepository.Query();
 
                 if (!string.IsNullOrWhiteSpace(req.UserId))
-                    q = q.Where(x => x.UserId == req.UserId);
+                    query = query.Where(x => x.UserId == req.UserId);
 
                 if (req.From is not null)
-                    q = q.Where(x => x.Timestamp >= req.From.Value);
+                    query = query.Where(x => x.Timestamp >= req.From.Value);
 
                 if (req.To is not null)
-                    q = q.Where(x => x.Timestamp <= req.To.Value);
+                    query = query.Where(x => x.Timestamp <= req.To.Value);
 
                 if (!string.IsNullOrWhiteSpace(req.ActionType))
-                    q = q.Where(x => x.ActionType == req.ActionType);
+                    query = query.Where(x => x.ActionType == req.ActionType);
 
-                q = req.SortBy switch
+                query = req.SortBy switch
                 {
-                    Constants.SortOptions.TimestampAsc => q.OrderBy(x => x.Timestamp),
-                    _ => q.OrderByDescending(x => x.Timestamp)
+                    Constants.SortOptions.TimestampAsc => query.OrderBy(x => x.Timestamp),
+                    _ => query.OrderByDescending(x => x.Timestamp)
                 };
 
-                var total = await q.LongCountAsync(ct);
+                var total = await query.LongCountAsync(ct);
 
-                var items = await q
+                var items = await query
                     .Skip((req.Page - 1) * req.PageSize)
                     .Take(req.PageSize)
                     .ToListAsync(ct);

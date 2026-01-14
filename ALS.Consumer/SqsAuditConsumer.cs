@@ -79,21 +79,24 @@ namespace ALS.Consumer
 
                             using var diScope = _sp.CreateScope();
                             var ingestion = diScope.ServiceProvider.GetRequiredService<IAuditIngestionService>();
-                            await ingestion.IngestAsync(dto, AuditIngestSource.Sqs, m.MessageId, ct);
+                            var eventId = await ingestion.IngestAsync(dto, AuditIngestSource.Sqs, m.MessageId, ct);
+                            
+                            _metrics.EventsIngested.Inc();
+                            _logger.LogInformation(Constants.LogMessages.IngestedAuditEventWithId, eventId);
 
                             await _sqs.DeleteMessageAsync(_queueUrl, m.ReceiptHandle, ct);
                         }
                         catch (Exception ex)
                         {
                             _metrics.QueueConsumerErrors.Inc();
-                            _logger.LogError(ex, Constants.ErrorMessages.FailedProcessingSQSMessage);
+                            _logger.LogError(ex, Constants.ErrorMessages.FailedProcessingSqsMessage);
                         }
                     }
                 }
                 catch (Exception ex)
                 {
                     _metrics.QueueConsumerErrors.Inc();
-                    _logger.LogError(ex, Constants.ErrorMessages.SQSReceiveLoopError);
+                    _logger.LogError(ex, Constants.ErrorMessages.SqsReceiveLoopError);
                     await Task.Delay(TimeSpan.FromSeconds(2), ct);
                 }
             }

@@ -11,10 +11,10 @@
             public const string EntityIdIsRequired = "EntityId parameter is required.";
 
             //SQS
-            public const string FailedProcessingSQSMessage = "Failed processing SQS message.";
+            public const string FailedProcessingSqsMessage = "Failed processing SQS message.";
             public const string QueueUrlNotSet = "QueueUrl not set.";
             public const string InvalidPayload = "Invalid payload.";
-            public const string SQSReceiveLoopError = "SQS receive loop error.";
+            public const string SqsReceiveLoopError = "SQS receive loop error.";
 
             //QueryService
             public const string SearchAsyncQueryError = "Error while querying database. Exception message: {message}";
@@ -29,17 +29,18 @@
             public const string PostErrorWithMessage = "Error while ingesting audit instance. Exception message: {message}.";
 
             //Worker
-            public const string WorkerDelayMilliseconsNotConfigured = "Worker:DelayMilliseconds is not configured.";
+            public const string WorkerDelayMillisecondsNotConfigured = "Worker:DelayMilliseconds is not configured.";
         }
 
         public static class LogMessages
         {
             //Event
             public const string IngestingAuditEvent = "Ingesting audit event. source={Source} userId={UserId} actionType={ActionType} entityId={EntityId} traceId={TraceId}.";
+            public const string IngestedAuditEventWithId = "Ingested AuditEvent with id: {eventId}";
             
             //SQS
-            public const string SQSReachable = "SQS reachable.";
-            public const string SQSUnreachable = "SQS unreachable.";
+            public const string SqsReachable = "SQS reachable.";
+            public const string SqsUnreachable = "SQS unreachable.";
 
             //Worker
             public const string WorkerRunningAt = "Worker running at: {time}";

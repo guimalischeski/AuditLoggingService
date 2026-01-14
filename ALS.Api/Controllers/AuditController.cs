@@ -54,9 +54,9 @@ namespace ALS.Api.Controllers
             try
             {
                 var traceId = System.Diagnostics.Activity.Current?.TraceId.ToString() ?? HttpContext.TraceIdentifier;
-                await _auditIngestionService.IngestAsync(dto, AuditIngestSource.Http, traceId, ct);
+                var eventId = await _auditIngestionService.IngestAsync(dto, AuditIngestSource.Http, traceId, ct);
 
-                return Accepted();
+                return Accepted(eventId);
             }
             catch (Exception ex)
             {

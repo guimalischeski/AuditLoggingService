@@ -1,0 +1,17 @@
+@startuml
+
+participant "SQS" as MessageQueue
+participant "ALS.Consumer" as Consumer
+participant "AuditIngestionService" as IngestionService
+participant "AuditRepository" as Repository
+database DB
+
+MessageQueue -> Consumer : ReceiveMessageAsync(ReceiveMessageRequest)
+Consumer -> IngestionService : Ingest(dto)
+IngestionService -> Repository : AddAsync(event)
+Repository -> DB : Add(AuditEvent)
+DB --> Repository : EventId
+Repository --> IngestionService : EventId
+IngestionService --> Consumer : EventId
+
+@enduml

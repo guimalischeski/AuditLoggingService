@@ -1,0 +1,20 @@
+@startuml
+
+actor Client
+participant "ALS.Api" as API
+participant "AuditQueryService" as QueryService
+participant "AuditRepository" as Repository
+database DB
+
+Client -> API : GET /api/audit
+API -> QueryService : SearchAsync(AuditSearchRequest)
+QueryService -> Repository : Query()
+Repository -> DB
+DB --> Repository : IQueryable<AuditEvent>
+Repository --> QueryService : IQueryable<AuditEvent>
+QueryService -> DB : ToListAsync() (SELECT)
+DB --> QueryService : List<AuditEvent>
+QueryService --> API : PagedResult<AuditEvent>
+API --> Client : PagedResult<AuditEvent>
+
+@enduml

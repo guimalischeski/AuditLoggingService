@@ -1,0 +1,40 @@
+@startuml
+skinparam componentStyle rectangle
+
+package "ALS.Api" {
+  [AuditController] as ApiAuditController
+  [AuditIngestionService] as ApiIngestionService
+  [AuditQueryService] as ApiQueryService
+}
+
+package "ALS.Consumer" {
+  [Worker] as ConsumerWorker
+  [AuditIngestionService] as ConsumerIngestionService
+}
+
+queue "SQS (LocalStack/AWS)" as SQS
+
+package "ALS.Infrastructure" {
+  [AuditRepository] as AuditRepository
+  [AuditDbContext] as AuditDbContext
+}
+
+database "SQL Server" as DB
+
+' ALS.Api
+ApiAuditController --> ApiIngestionService : ingest
+ApiIngestionService --> AuditRepository : persist
+
+ApiAuditController --> ApiQueryService : search
+ApiQueryService --> AuditRepository : query
+
+' ALS.Consumer
+SQS --> ConsumerWorker : consume
+ConsumerWorker --> ConsumerIngestionService : ingest
+ConsumerIngestionService --> AuditRepository : persist
+
+' ALS.Infrastructure
+AuditRepository --> AuditDbContext
+AuditDbContext --> DB : save
+
+@enduml
