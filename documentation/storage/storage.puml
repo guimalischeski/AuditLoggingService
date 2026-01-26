@@ -1,0 +1,35 @@
+﻿@startuml
+hide circle
+skinparam linetype ortho
+skinparam entityAttributeIconSize 0
+
+entity "dbo.AuditEvents" as AuditEvents {
+  * Id : bigint <<PK, IDENTITY>>
+  --
+  Timestamp : datetimeoffset(7) <<NOT NULL>>
+  UserId : nvarchar(128) <<NOT NULL>>
+  ActionType : nvarchar(64) <<NOT NULL>>
+  EntityId : nvarchar(128) <<NOT NULL>>
+  MetadataJson : nvarchar(max) <<NOT NULL>>
+  IngestSource : int <<NOT NULL>>
+  TraceId : nvarchar(64) <<NOT NULL>>
+}
+
+entity "dbo.__EFMigrationsHistory" as EFHistory {
+  * MigrationId : nvarchar(150) <<PK>>
+  --
+  ProductVersion : nvarchar(32) <<NOT NULL>>
+}
+
+note bottom of AuditEvents
+Indexes:
+- IX_AuditEvents_Timestamp (Timestamp)
+- IX_AuditEvents_UserId_Timestamp (UserId, Timestamp)
+- IX_AuditEvents_ActionType_Timestamp (ActionType, Timestamp)
+end note
+
+note bottom of EFHistory
+Internal EF Core table.
+end note
+
+@enduml
