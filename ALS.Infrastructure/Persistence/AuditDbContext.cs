@@ -23,7 +23,6 @@ namespace ALS.Infrastructure.Persistence
             e.Property(x => x.IngestSource).HasMaxLength(32).IsRequired();
             e.Property(x => x.TraceId).HasMaxLength(64).IsRequired();
 
-            // Indexes to avoid full table scans
             e.HasIndex(x => new { x.UserId, x.Timestamp });
             e.HasIndex(x => new { x.ActionType, x.Timestamp });
             e.HasIndex(x => x.Timestamp);
