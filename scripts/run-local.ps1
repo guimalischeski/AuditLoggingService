@@ -83,6 +83,8 @@ dotnet ef database update `
   --project ALS.Infrastructure `
   --startup-project ALS.Api
 
+$apiUrl = "http://localhost:5154"
+
 Write-Host "Starting API..."
 Start-Process powershell -ArgumentList "dotnet run --project ALS.Api"
 
