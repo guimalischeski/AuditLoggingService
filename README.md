@@ -39,6 +39,7 @@ Audit Logging Service (ALS) is a .NET-based backend system designed to ingest, p
     Script will:
     - Start SQL Server container (or reuse existing)
     - Start LocalStack (SQS)
+    - Start Prometheus
     - Wait for SQL Server to be ready
     - Apply EF migrations
     - Start ALS.Api
@@ -67,14 +68,14 @@ AWS_DEFAULT_REGION={{AWS_DEFAULT_REGION}}
 5. ```GET``` ```/metrics/als``` – ALS-only metrics
 
 ### Metrics exposed
-- als_events_ingested_total
-- als_queue_consumer_errors_total
-- als_processing_time_seconds
+- sqsauditconsumer_ingested_events
+- sqsauditconsumer_consumer_errors
+- sqsauditconsumer_processing_time
 
 ## Scripts
 ### scripts/run-local.ps1
 - Loads .env;
-- Starts Docker containers (SQL Server + LocalStack);
+- Starts Docker containers (SQL Server + LocalStack + Prometheus);
 - Applies EF migrations;
 - Starts API and Consumer processes;
 
@@ -99,6 +100,11 @@ AWS_DEFAULT_REGION={{AWS_DEFAULT_REGION}}
         - SQS only
     - Exposed on port: 4566
 
+3. Prometheus
+    - Defined in:
+        - docker/prometheus/docker-compose.yml
+    - Exposed on port: 9090
+
 ## Migrations
 - Under ALS.Infrastructure project;
 - Migrations are applied automatically by run-local.ps1 script;
@@ -108,4 +114,3 @@ AWS_DEFAULT_REGION={{AWS_DEFAULT_REGION}}
 ## Notes
 - Ingestion source is stored as an enum (int) for better clarity;
 - API and Consumer share the same ingestion logic;
-- Metrics are split between full ```/metrics``` and focused ```/metrics/als```;

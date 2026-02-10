@@ -1,0 +1,8 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: als-consumer
+    metrics_path: /metrics/als
+    static_configs:
+      - targets: ["host.docker.internal:5155"]

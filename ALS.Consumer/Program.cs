@@ -5,6 +5,9 @@ using ALS.Infrastructure.Persistence;
 using ALS.Infrastructure.Services;
 using Amazon.SQS;
 using Microsoft.EntityFrameworkCore;
+using OpenTelemetry.Exporter;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -28,6 +31,22 @@ builder.Services.AddSingleton<IAmazonSQS>(_ =>
 
     return new AmazonSQSClient(cfg);
 });
+
+builder.Services
+    .AddOpenTelemetry()
+    .WithMetrics(metrics =>
+    {
+        metrics
+            .SetResourceBuilder(ResourceBuilder.CreateDefault()
+                .AddService("als-consumer"))
+            .AddMeter($"{nameof(SqsAuditConsumer)}.Metrics")
+            .AddOtlpExporter((options, exportedMetrics) =>
+            {
+                options.Endpoint = new Uri("http://localhost:9090/api/v1/otlp/v1/metrics");
+                options.Protocol = OtlpExportProtocol.HttpProtobuf;
+                exportedMetrics.PeriodicExportingMetricReaderOptions.ExportIntervalMilliseconds = 1000;
+            });
+    });
 
 builder.Services.AddScoped<IAuditRepository, AuditRepository>();
 builder.Services.AddScoped<IAuditIngestionService, AuditIngestionService>();

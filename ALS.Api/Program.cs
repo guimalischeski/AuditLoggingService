@@ -1,12 +1,10 @@
 using ALS.Core.Constants;
 using ALS.Core.Interfaces;
-using ALS.Core.Observability;
 using ALS.Infrastructure.Health;
 using ALS.Infrastructure.Persistence;
 using ALS.Infrastructure.Services;
 using Amazon.SQS;
 using Microsoft.EntityFrameworkCore;
-using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,8 +39,6 @@ builder.Services.AddScoped<IAuditRepository, AuditRepository>();
 builder.Services.AddScoped<IAuditQueryService, AuditQueryService>();
 builder.Services.AddScoped<IAuditIngestionService, AuditIngestionService>();
 
-builder.Services.AddSingleton(AuditMetrics.Instance);
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -52,10 +48,6 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseRouting();
-
-app.UseHttpMetrics();
-app.MapMetrics("/metrics");
-app.UseMetricServer(url: "/metrics/als", registry: AuditMetrics.Registry);
 
 app.MapControllers();
 

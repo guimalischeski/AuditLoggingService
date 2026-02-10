@@ -73,12 +73,17 @@ Ensure-ComposeServiceRunning -ComposeFile "docker/sqlserver/docker-compose.yml" 
 Write-Host "Starting LocalStack (SQS)..."
 Ensure-ComposeServiceRunning -ComposeFile "docker/localstack/docker-compose.yml" -ContainerName "als-localstack"
 
+Write-Host "Starting Prometheus..."
+Ensure-ComposeServiceRunning -ComposeFile "docker/prometheus/docker-compose.yml" -ContainerName "als-prometheus"
+
 Wait-SqlServerReady -ContainerName "als-sql"
 
 Write-Host "Running EF migrations..."
 dotnet ef database update `
   --project ALS.Infrastructure `
   --startup-project ALS.Api
+
+$apiUrl = "http://localhost:5154"
 
 Write-Host "Starting API..."
 Start-Process powershell -ArgumentList "dotnet run --project ALS.Api"
@@ -87,3 +92,5 @@ Write-Host "Starting Consumer..."
 Start-Process powershell -ArgumentList "dotnet run --project ALS.Consumer"
 
 Write-Host "Local environment is up"
+Write-Host " - API Swagger:      $apiUrl/swagger"
+Write-Host " - Prometheus UI:    http://localhost:9090"
