@@ -26,6 +26,7 @@ namespace ALS.Infrastructure.Persistence
             e.HasIndex(x => new { x.UserId, x.Timestamp });
             e.HasIndex(x => new { x.ActionType, x.Timestamp });
             e.HasIndex(x => x.Timestamp);
+            e.HasIndex(x => new { x.UserId, x.ActionType, x.Timestamp });
         }
     }
 }

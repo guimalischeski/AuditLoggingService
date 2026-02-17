@@ -40,13 +40,13 @@ namespace ALS.Infrastructure.Services
                 if (!string.IsNullOrWhiteSpace(req.ActionType))
                     query = query.Where(x => x.ActionType == req.ActionType);
 
+                var total = await query.LongCountAsync(ct);
+
                 query = req.SortBy switch
                 {
                     Constants.SortOptions.TimestampAsc => query.OrderBy(x => x.Timestamp),
                     _ => query.OrderByDescending(x => x.Timestamp)
                 };
-
-                var total = await query.LongCountAsync(ct);
 
                 var items = await query
                     .Skip((req.Page - 1) * req.PageSize)

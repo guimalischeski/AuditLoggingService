@@ -38,7 +38,7 @@ namespace ALS.Infrastructure.Services
                     UserId = dto.UserId,
                     ActionType = dto.ActionType,
                     EntityId = dto.EntityId,
-                    MetadataJson = dto.Metadata is null ? "{}" : JsonSerializer.Serialize(dto.Metadata),
+                    MetadataJson = dto.Metadata is null ? "{}" : dto.Metadata.Value.GetRawText(),
                     IngestSource = source,
                     TraceId = traceId
                 };
