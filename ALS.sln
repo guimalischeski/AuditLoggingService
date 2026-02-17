@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALS.Core", "ALS.Core\ALS.Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALS.Infrastructure", "ALS.Infrastructure\ALS.Infrastructure.csproj", "{501AB47B-E830-4F06-A63E-8B160F31DCB3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqsLoadProducer", "SqsLoadProducer\SqsLoadProducer.csproj", "{9D466331-8AE4-4B6C-AB89-B58BDBB34A38}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,18 @@ Global
 		{501AB47B-E830-4F06-A63E-8B160F31DCB3}.Release|x64.Build.0 = Release|Any CPU
 		{501AB47B-E830-4F06-A63E-8B160F31DCB3}.Release|x86.ActiveCfg = Release|Any CPU
 		{501AB47B-E830-4F06-A63E-8B160F31DCB3}.Release|x86.Build.0 = Release|Any CPU
+		{9D466331-8AE4-4B6C-AB89-B58BDBB34A38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D466331-8AE4-4B6C-AB89-B58BDBB34A38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D466331-8AE4-4B6C-AB89-B58BDBB34A38}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9D466331-8AE4-4B6C-AB89-B58BDBB34A38}.Debug|x64.Build.0 = Debug|Any CPU
+		{9D466331-8AE4-4B6C-AB89-B58BDBB34A38}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9D466331-8AE4-4B6C-AB89-B58BDBB34A38}.Debug|x86.Build.0 = Debug|Any CPU
+		{9D466331-8AE4-4B6C-AB89-B58BDBB34A38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D466331-8AE4-4B6C-AB89-B58BDBB34A38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D466331-8AE4-4B6C-AB89-B58BDBB34A38}.Release|x64.ActiveCfg = Release|Any CPU
+		{9D466331-8AE4-4B6C-AB89-B58BDBB34A38}.Release|x64.Build.0 = Release|Any CPU
+		{9D466331-8AE4-4B6C-AB89-B58BDBB34A38}.Release|x86.ActiveCfg = Release|Any CPU
+		{9D466331-8AE4-4B6C-AB89-B58BDBB34A38}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
